@@ -14,6 +14,10 @@ function createCard(title, description, pictureUrl, starts, ends, location) {
 	`;
 }
 
+function raiseError() {
+	return `<div class="alert alert-danger" role="alert">There was an error retrieving the requested information.</div>`;
+}
+
 window.addEventListener("DOMContentLoaded", async () => {
 	const url = "http://localhost:8000/api/conferences/";
 
@@ -21,7 +25,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 		const response = await fetch(url);
 
 		if (!response.ok) {
-			// Figure out what to do when the response is bad
+			const row = document.querySelector(".row");
+			row.innerHTML = raiseError();
 		} else {
 			const data = await response.json();
 
@@ -46,12 +51,13 @@ window.addEventListener("DOMContentLoaded", async () => {
 						ends,
 						location
 					);
-					const column = document.querySelector(".row");
-					column.innerHTML += html;
+					const row = document.querySelector(".row");
+					row.innerHTML += html;
 				}
 			}
 		}
 	} catch (e) {
-		// Figure out what to do if an error is raised
+		const row = document.querySelector(".row");
+		row.innerHTML = raiseError();
 	}
 });
