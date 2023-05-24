@@ -10,8 +10,8 @@
 			integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 			crossorigin="anonymous"
 		/>
-		<title>New Location :: Conference GO!</title>
-		<script type="module" src="js/new-location.js"></script>
+		<title>New Conference :: Conference GO!</title>
+		<script type="module" src="js/new-conference.js"></script>
 	</head>
 
 	<body>
@@ -33,14 +33,21 @@
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 							<li class="nav-item">
-								<a class="nav-link active" aria-current="page" href="/">Home</a>
+								<a class="nav-link" aria-current="page" href="/">Home</a>
 							</li>
-							<a
-								class="nav-link active"
-								aria-current="page"
-								href="new-location.html"
-								>New Location</a
-							>
+							<li>
+								<a class="nav-link" aria-current="page" href="new-location.html"
+									>New Location</a
+								>
+							</li>
+							<li>
+								<a
+									class="nav-link active"
+									aria-current="page"
+									href="new-conference.html"
+									>New Conference</a
+								>
+							</li>
 						</ul>
 						<form class="d-flex">
 							<input
@@ -77,29 +84,67 @@
 								</div>
 								<div class="form-floating mb-3">
 									<input
-										placeholder="Room count"
+										placeholder="Starts"
 										required
-										type="number"
-										name="room_count"
-										id="room_count"
+										type="date"
+										name="starts"
+										id="starts"
 										class="form-control"
 									/>
-									<label for="room_count">Room count</label>
+									<label for="name">Starts</label>
 								</div>
 								<div class="form-floating mb-3">
 									<input
-										placeholder="City"
+										placeholder="Ends"
 										required
-										type="text"
-										name="city"
-										id="city"
+										type="date"
+										name="ends"
+										id="ends"
 										class="form-control"
 									/>
-									<label for="city">City</label>
+									<label for="name">Ends</label>
+								</div>
+								<div class="form mb-3">
+									<label for="name">Description</label>
+									<textarea
+										required
+										type="textarea"
+										name="description"
+										id="description"
+										class="form-control"
+										rows="3"
+									></textarea>
+								</div>
+								<div class="form-floating mb-3">
+									<input
+										placeholder="Maximum Presentations"
+										required
+										type="number"
+										name="max_presentations"
+										id="max_presentations"
+										class="form-control"
+									/>
+									<label for="name">Maximum Presentations</label>
+								</div>
+								<div class="form-floating mb-3">
+									<input
+										placeholder="Maximum Attendees"
+										required
+										type="number"
+										name="max_attendees"
+										id="max_attendees"
+										class="form-control"
+									/>
+									<label for="name">Maximum Attendees</label>
 								</div>
 								<div class="mb-3">
-									<select required id="state" name="state" class="form-select">
-										<option selected value="">Choose a state</option>
+									<select
+										required
+										id="location"
+										name="location"
+										class="form-select"
+									>
+										<option selected value="">Choose a location</option>
 									</select>
 								</div>
 								<button class="btn btn-primary">Create</button>
