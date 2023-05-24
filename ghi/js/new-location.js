@@ -1,9 +1,7 @@
-// event listener when the document loads
 window.addEventListener("DOMContentLoaded", async () => {
 	const url = "http://localhost:8000/api/states/";
 	const response = await fetch(url);
 
-	// if
 	if (response.ok) {
 		const data = await response.json();
 
@@ -36,7 +34,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 		if (response.ok) {
 			formTag.reset();
 			const newLocation = await response.json();
-			console.log(newLocations);
 		}
 	});
 });
