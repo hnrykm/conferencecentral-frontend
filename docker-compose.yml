@@ -1,17 +1,18 @@
-version: "3.7"
+version: '3.7'
 services:
   monolith:
     build:
       context: ./monolith
       dockerfile: ./Dockerfile.dev
     environment:
-      DATABASE_URL: "postgres://monolith:password@database:5432/monolith"
+      DATABASE_URL: 'postgres://monolith:password@database:5432/monolith'
       WAIT_HOSTS: database:5432, rabbitmq:5672
       WAIT_TIMEOUT: 180
       PEXELS_API_KEY: ${PEXELS_API_KEY}
       OPEN_WEATHER_API_KEY: ${OPEN_WEATHER_API_KEY}
+      DJWTO_SIGNING_KEY: ${DJWTO_SIGNING_KEY}
     ports:
-      - "8000:8000"
+      - '8000:8000'
     volumes:
       - ./monolith:/app
     depends_on:
@@ -22,14 +23,14 @@ services:
       context: ./attendees_microservice
       dockerfile: ./Dockerfile.dev
     ports:
-      - "8001:8001"
+      - '8001:8001'
     volumes:
       - ./attendees_microservice:/app
     depends_on:
       - rabbitmq
       - database
     environment:
-      DATABASE_URL: "postgres://attendees:password@database:5432/attendees"
+      DATABASE_URL: 'postgres://attendees:password@database:5432/attendees'
       WAIT_HOSTS: database:5432, rabbitmq:5672
       WAIT_TIMEOUT: 180
   attendees_conference_info:
@@ -41,7 +42,7 @@ services:
     depends_on:
       - monolith
     environment:
-      DATABASE_URL: "postgres://attendees:password@database:5432/attendees"
+      DATABASE_URL: 'postgres://attendees:password@database:5432/attendees'
   attendees_account_info:
     build:
       context: ./attendees_microservice
@@ -52,7 +53,7 @@ services:
       - rabbitmq
       - database
     environment:
-      DATABASE_URL: "postgres://attendees:password@database:5432/attendees"
+      DATABASE_URL: 'postgres://attendees:password@database:5432/attendees'
       WAIT_HOSTS: database:5432, rabbitmq:5672
       WAIT_TIMEOUT: 180
   presentation_workflow:
@@ -73,7 +74,7 @@ services:
       - MH_STORAGE=maildir
       - MH_MAILDIR_PATH=/maildir
     ports:
-      - "8025:8025"
+      - '8025:8025'
     volumes:
       - ./maildir:/maildir
   web:
@@ -81,7 +82,7 @@ services:
     volumes:
       - ./ghi:/usr/share/nginx/html:ro
     ports:
-      - "3000:80"
+      - '3000:80'
   database:
     image: postgres:14
     volumes:

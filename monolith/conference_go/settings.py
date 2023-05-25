@@ -46,10 +46,14 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
+    "djwto",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
+DJWTO_MODE = "TWO-COOKIES"
+DJWTO_ACCESS_TOKEN_LIFETIME = None
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -91,7 +95,8 @@ WSGI_APPLICATION = "conference_go.wsgi.application"
 
 DATABASES = {}
 DATABASES["default"] = dj_database_url.config()
-
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOW_CREDENTIALS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
