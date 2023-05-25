@@ -7,14 +7,14 @@ window.addEventListener('DOMContentLoaded', () => {
 		const fetchOptions = {
 			method: 'post',
 			body: new FormData(form),
+			credentials: 'include',
 			// headers: {
 			// 	'Content-Type': 'application/json',
 			// },
 		};
 
 		const url = 'http://localhost:8000/login/';
-		const credentials = 'https://user:hnrykm@gmail.com/';
-		const response = await fetch(url, fetchOptions, credentials);
+		const response = await fetch(url, fetchOptions);
 		if (response.ok) {
 			window.location.href = '/';
 		} else {
