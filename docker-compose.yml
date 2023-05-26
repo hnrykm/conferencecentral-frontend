@@ -18,6 +18,7 @@ services:
     depends_on:
       - rabbitmq
       - database
+
   attendees_microservice:
     build:
       context: ./attendees_microservice
@@ -33,6 +34,7 @@ services:
       DATABASE_URL: 'postgres://attendees:password@database:5432/attendees'
       WAIT_HOSTS: database:5432, rabbitmq:5672
       WAIT_TIMEOUT: 180
+
   attendees_conference_info:
     build:
       context: ./attendees_microservice
@@ -43,6 +45,7 @@ services:
       - monolith
     environment:
       DATABASE_URL: 'postgres://attendees:password@database:5432/attendees'
+
   attendees_account_info:
     build:
       context: ./attendees_microservice
@@ -56,6 +59,19 @@ services:
       DATABASE_URL: 'postgres://attendees:password@database:5432/attendees'
       WAIT_HOSTS: database:5432, rabbitmq:5672
       WAIT_TIMEOUT: 180
+
+  react-attendees:
+    image: node:latest
+    command: npm start
+    working_dir: /app
+    volumes:
+      - ./ghi/attendees:/app
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3001
+    ports:
+      - '3001:3001'
+
   presentation_workflow:
     build:
       context: ./presentation_workflow
