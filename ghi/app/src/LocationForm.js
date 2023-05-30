@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+function createSuccess() {
+	return `<div class="alert alert-success" role="alert">New location successfully created!</div>`;
+}
+
 function LocationForm(props) {
 	const [states, setStates] = useState([]);
 	const [name, setName] = useState('');
-	const [city, setCity] = useState('');
 	const [roomCount, setRoomCount] = useState('');
+	const [city, setCity] = useState('');
 	const [state, setState] = useState('');
 
 	const handleNameChange = (event) => {
@@ -23,14 +27,38 @@ function LocationForm(props) {
 		const value = event.target.value;
 		setState(value);
 	};
-	// const setState = (event) => {
-	// 	const value = event.target.value;
-	// 	setState(value);
-	// };
+	const handleSubmit = async (event) => {
+		event.preventDefault();
 
-	// function stateChanged(event) {
-	// 	setStates(event.target.value);
-	// }
+		const data = {};
+
+		data.room_count = roomCount;
+		data.name = name;
+		data.city = city;
+		data.state = state;
+
+		const locationUrl = 'http://localhost:8000/api/locations/';
+		const fetchConfig = {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-type': 'application/json',
+			},
+		};
+
+		const response = await fetch(locationUrl, fetchConfig);
+		if (response.ok) {
+			const success = document.getElementById('submitted');
+			success.innerHTML = createSuccess();
+			const newLocation = await response.json();
+			console.log(newLocation);
+
+			setName('');
+			setRoomCount('');
+			setCity('');
+			setState('');
+		}
+	};
 
 	// Form Data
 	// const [formData, setFormData] = useState({
@@ -67,7 +95,7 @@ function LocationForm(props) {
 			<div className="offset-3 col-6">
 				<div className="shadow p-4 mt-4">
 					<h1>Create a new location</h1>
-					<form id="create-location-form">
+					<form id="create-location-form" onSubmit={handleSubmit}>
 						<div className="form-floating mb-3">
 							<input
 								placeholder="Name"
