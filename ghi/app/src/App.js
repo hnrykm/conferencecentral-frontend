@@ -11,7 +11,7 @@ function App(props) {
 			<Nav />
 			<div className="container">
 				<LocationForm />
-				<AttendeesList attendees={props.attendees} />
+				{/* <AttendeesList attendees={props.attendees} /> */}
 			</div>
 		</>
 	);
