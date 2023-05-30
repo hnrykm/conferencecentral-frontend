@@ -1,10 +1,44 @@
 import React, { useEffect, useState } from 'react';
 
-function LocationForm() {
+function LocationForm(props) {
 	const [states, setStates] = useState([]);
+	const [name, setName] = useState('');
+	const [city, setCity] = useState('');
+	const [roomCount, setRoomCount] = useState('');
+	const [state, setState] = useState('');
+
+	const handleNameChange = (event) => {
+		const value = event.target.value;
+		setName(value);
+	};
+	const handleCityChange = (event) => {
+		const value = event.target.value;
+		setCity(value);
+	};
+	const handleRoomCountChange = (event) => {
+		const value = event.target.value;
+		setRoomCount(value);
+	};
+	const handleStateChange = (event) => {
+		const value = event.target.value;
+		setState(value);
+	};
+	// const setState = (event) => {
+	// 	const value = event.target.value;
+	// 	setState(value);
+	// };
+
 	// function stateChanged(event) {
 	// 	setStates(event.target.value);
 	// }
+
+	// Form Data
+	// const [formData, setFormData] = useState({
+	// 	name: '',
+	// 	roomcount: '',
+	// 	city: '',
+	// 	state: '',
+	// });
 
 	const fetchData = async () => {
 		const url = 'http://localhost:8000/api/states/';
@@ -42,6 +76,8 @@ function LocationForm() {
 								name="name"
 								id="name"
 								className="form-control"
+								onChange={handleNameChange}
+								value={name}
 							/>
 							<label htmlFor="name">Name</label>
 						</div>
@@ -53,6 +89,8 @@ function LocationForm() {
 								name="room_count"
 								id="room_count"
 								className="form-control"
+								onChange={handleRoomCountChange}
+								value={roomCount}
 							/>
 							<label htmlFor="room_count">Room count</label>
 						</div>
@@ -64,11 +102,19 @@ function LocationForm() {
 								name="city"
 								id="city"
 								className="form-control"
+								onChange={handleCityChange}
+								value={city}
 							/>
 							<label htmlFor="city">City</label>
 						</div>
 						<div className="mb-3">
-							<select required id="state" name="state" className="form-select">
+							<select
+								required
+								id="state"
+								name="state"
+								className="form-select"
+								onChange={handleStateChange}
+							>
 								<option value="">Choose a state</option>
 								{states.map((state) => {
 									return (
