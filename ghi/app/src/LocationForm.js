@@ -4,38 +4,31 @@ function createSuccess() {
 	return `<div class="alert alert-success" role="alert">New location successfully created!</div>`;
 }
 
-function LocationForm(props) {
-	const [states, setStates] = useState([]);
-	const [name, setName] = useState('');
-	const [roomCount, setRoomCount] = useState('');
-	const [city, setCity] = useState('');
-	const [state, setState] = useState('');
+function LocationForm() {
+	const [formData, setFormData] = useState({
+		name: '',
+		roomCount: '',
+		city: '',
+		state: '',
+	});
 
-	const handleNameChange = (event) => {
+	const [states, setStates] = useState([]);
+
+	const handleFormDataChange = async (event) => {
+		const name = event.target.name;
 		const value = event.target.value;
-		setName(value);
+		setFormData({ ...formData, [name]: value });
 	};
-	const handleCityChange = (event) => {
-		const value = event.target.value;
-		setCity(value);
-	};
-	const handleRoomCountChange = (event) => {
-		const value = event.target.value;
-		setRoomCount(value);
-	};
-	const handleStateChange = (event) => {
-		const value = event.target.value;
-		setState(value);
-	};
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
 		const data = {};
 
-		data.room_count = roomCount;
-		data.name = name;
-		data.city = city;
-		data.state = state;
+		data.name = formData.name;
+		data.room_count = formData.roomCount;
+		data.city = formData.city;
+		data.state = formData.state;
 
 		const locationUrl = 'http://localhost:8000/api/locations/';
 		const fetchConfig = {
@@ -50,23 +43,14 @@ function LocationForm(props) {
 		if (response.ok) {
 			const success = document.getElementById('submitted');
 			success.innerHTML = createSuccess();
-			const newLocation = await response.json();
-			console.log(newLocation);
-
-			setName('');
-			setRoomCount('');
-			setCity('');
-			setState('');
+			setFormData({
+				name: '',
+				roomCount: '',
+				city: '',
+				state: '',
+			});
 		}
 	};
-
-	// Form Data
-	// const [formData, setFormData] = useState({
-	// 	name: '',
-	// 	roomcount: '',
-	// 	city: '',
-	// 	state: '',
-	// });
 
 	const fetchData = async () => {
 		const url = 'http://localhost:8000/api/states/';
@@ -76,13 +60,6 @@ function LocationForm(props) {
 		if (response.ok) {
 			const data = await response.json();
 			setStates(data.states);
-			// const selectTag = document.getElementById('state');
-			// for (let state of data.states) {
-			// 	const option = document.createElement('option');
-			// 	option.value = state.abbreviation;
-			// 	option.innerHTML = state.name;
-			// 	selectTag.appendChild(option);
-			// }
 		}
 	};
 
@@ -104,8 +81,8 @@ function LocationForm(props) {
 								name="name"
 								id="name"
 								className="form-control"
-								onChange={handleNameChange}
-								value={name}
+								onChange={handleFormDataChange}
+								value={formData.name}
 							/>
 							<label htmlFor="name">Name</label>
 						</div>
@@ -114,13 +91,13 @@ function LocationForm(props) {
 								placeholder="Room count"
 								required
 								type="number"
-								name="room_count"
-								id="room_count"
+								name="roomCount"
+								id="roomCount"
 								className="form-control"
-								onChange={handleRoomCountChange}
-								value={roomCount}
+								onChange={handleFormDataChange}
+								value={formData.roomCount}
 							/>
-							<label htmlFor="room_count">Room count</label>
+							<label htmlFor="roomCount">Room count</label>
 						</div>
 						<div className="form-floating mb-3">
 							<input
@@ -130,8 +107,8 @@ function LocationForm(props) {
 								name="city"
 								id="city"
 								className="form-control"
-								onChange={handleCityChange}
-								value={city}
+								onChange={handleFormDataChange}
+								value={formData.city}
 							/>
 							<label htmlFor="city">City</label>
 						</div>
@@ -141,7 +118,7 @@ function LocationForm(props) {
 								id="state"
 								name="state"
 								className="form-select"
-								onChange={handleStateChange}
+								onChange={handleFormDataChange}
 							>
 								<option value="">Choose a state</option>
 								{states.map((state) => {

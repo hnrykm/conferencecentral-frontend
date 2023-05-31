@@ -6,54 +6,33 @@ function createSuccess() {
 
 function ConferenceForm() {
 	const [locations, setLocations] = useState([]);
-	const [name, setName] = useState('');
-	const [starts, setStarts] = useState('');
-	const [ends, setEnds] = useState('');
-	const [description, setDescription] = useState('');
-	const [maxPresentations, setMaxPresentations] = useState('');
-	const [maxAttendees, setMaxAttendees] = useState('');
-	const [location, setLocation] = useState('');
+	const [formData, setFormData] = useState({
+		name: '',
+		starts: '',
+		ends: '',
+		description: '',
+		maxPresentations: '',
+		maxAttendees: '',
+		location: '',
+	});
 
-	const handleNameChange = (event) => {
+	const handleFormDataChange = async (event) => {
+		const name = event.target.name;
 		const value = event.target.value;
-		return setName(value);
-	};
-	const handleStartsChange = (event) => {
-		const value = event.target.value;
-		return setStarts(value);
-	};
-	const handleEndsChange = (event) => {
-		const value = event.target.value;
-		return setEnds(value);
-	};
-	const handleDescriptionChange = (event) => {
-		const value = event.target.value;
-		return setDescription(value);
-	};
-	const handleMaxPresentationsChange = (event) => {
-		const value = event.target.value;
-		return setMaxPresentations(value);
-	};
-	const handleMaxAttendeesChange = (event) => {
-		const value = event.target.value;
-		return setMaxAttendees(value);
-	};
-	const handleLocationChange = (event) => {
-		const value = event.target.value;
-		return setLocation(value);
+		setFormData({ ...formData, [name]: value });
 	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
 		const data = {};
-		data.name = name;
-		data.starts = starts;
-		data.ends = ends;
-		data.description = description;
-		data.max_presentations = maxPresentations;
-		data.max_attendees = maxAttendees;
-		data.location = location;
+		data.name = formData.name;
+		data.starts = formData.starts;
+		data.ends = formData.ends;
+		data.description = formData.description;
+		data.max_presentations = formData.maxPresentations;
+		data.max_attendees = formData.maxAttendees;
+		data.location = formData.location;
 		console.log(data);
 
 		const conferenceUrl = 'http://localhost:8000/api/conferences/';
@@ -69,16 +48,15 @@ function ConferenceForm() {
 		if (response.ok) {
 			const success = document.getElementById('submitted');
 			success.innerHTML = createSuccess();
-			const newConference = await response.json();
-			console.log(newConference);
-
-			setName('');
-			setStarts('');
-			setEnds('');
-			setDescription('');
-			setMaxPresentations('');
-			setMaxAttendees('');
-			setLocation('Choose a location');
+			setFormData({
+				name: '',
+				starts: '',
+				ends: '',
+				description: '',
+				maxPresentations: '',
+				maxAttendees: '',
+				location: '',
+			});
 		}
 	};
 
@@ -110,8 +88,8 @@ function ConferenceForm() {
 								name="name"
 								id="name"
 								className="form-control"
-								onChange={handleNameChange}
-								value={name}
+								onChange={handleFormDataChange}
+								value={formData.name}
 							/>
 							<label htmlFor="name">Name</label>
 						</div>
@@ -123,8 +101,8 @@ function ConferenceForm() {
 								name="starts"
 								id="starts"
 								className="form-control"
-								onChange={handleStartsChange}
-								value={starts}
+								onChange={handleFormDataChange}
+								value={formData.starts}
 							/>
 							<label htmlFor="name">Starts</label>
 						</div>
@@ -136,8 +114,8 @@ function ConferenceForm() {
 								name="ends"
 								id="ends"
 								className="form-control"
-								onChange={handleEndsChange}
-								value={ends}
+								onChange={handleFormDataChange}
+								value={formData.ends}
 							/>
 							<label htmlFor="name">Ends</label>
 						</div>
@@ -149,9 +127,9 @@ function ConferenceForm() {
 								name="description"
 								id="description"
 								className="form-control"
-								onChange={handleDescriptionChange}
+								onChange={handleFormDataChange}
 								rows="3"
-								value={description}
+								value={formData.description}
 							></textarea>
 						</div>
 						<div className="form-floating mb-3">
@@ -159,11 +137,11 @@ function ConferenceForm() {
 								placeholder="Maximum Presentations"
 								required
 								type="number"
-								name="max_presentations"
-								id="max_presentations"
+								name="maxPresentations"
+								id="maxPresentations"
 								className="form-control"
-								onChange={handleMaxPresentationsChange}
-								value={maxPresentations}
+								onChange={handleFormDataChange}
+								value={formData.maxPresentations}
 							/>
 							<label htmlFor="name">Maximum Presentations</label>
 						</div>
@@ -172,11 +150,11 @@ function ConferenceForm() {
 								placeholder="Maximum Attendees"
 								required
 								type="number"
-								name="max_attendees"
-								id="max_attendees"
+								name="maxAttendees"
+								id="maxAttendees"
 								className="form-control"
-								onChange={handleMaxAttendeesChange}
-								value={maxAttendees}
+								onChange={handleFormDataChange}
+								value={formData.maxAttendees}
 							/>
 							<label htmlFor="name">Maximum Attendees</label>
 						</div>
@@ -186,7 +164,7 @@ function ConferenceForm() {
 								id="location"
 								name="location"
 								className="form-select"
-								onChange={handleLocationChange}
+								onChange={handleFormDataChange}
 							>
 								<option>Choose a location</option>
 								{locations.map((location) => {
