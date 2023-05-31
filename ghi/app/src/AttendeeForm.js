@@ -77,7 +77,7 @@ function AttendeeForm(props) {
 	}, []);
 
 	return (
-		<div className="my-5">
+		<div className="my-5 container">
 			<div className="row">
 				<div className="col col-sm-auto">
 					<img
