@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
+function createSuccess() {
+	return `<div class="alert alert-success" role="alert">New location successfully created!</div>`;
+}
+
 function ConferenceForm() {
 	const [locations, setLocations] = useState([]);
 	const [name, setName] = useState('');
@@ -39,6 +43,45 @@ function ConferenceForm() {
 		return setLocation(value);
 	};
 
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+
+		const data = {};
+		data.name = name;
+		data.starts = starts;
+		data.ends = ends;
+		data.description = description;
+		data.max_presentations = maxPresentations;
+		data.max_attendees = maxAttendees;
+		data.location = location;
+		console.log(data);
+
+		const conferenceUrl = 'http://localhost:8000/api/conferences/';
+		const fetchConfig = {
+			method: 'post',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		const response = await fetch(conferenceUrl, fetchConfig);
+		if (response.ok) {
+			const success = document.getElementById('submitted');
+			success.innerHTML = createSuccess();
+			const newConference = await response.json();
+			console.log(newConference);
+
+			setName('');
+			setStarts('');
+			setEnds('');
+			setDescription('');
+			setMaxPresentations('');
+			setMaxAttendees('');
+			setLocation('Choose a location');
+		}
+	};
+
 	const fetchData = async () => {
 		const url = 'http://localhost:8000/api/locations';
 		const response = await fetch(url);
@@ -58,7 +101,7 @@ function ConferenceForm() {
 			<div className="offset-3 col-6">
 				<div className="shadow p-4 mt-4">
 					<h1>Create a new conference</h1>
-					<form id="create-conference-form">
+					<form id="create-conference-form" onSubmit={handleSubmit}>
 						<div className="form-floating mb-3">
 							<input
 								placeholder="Name"
@@ -147,7 +190,11 @@ function ConferenceForm() {
 							>
 								<option>Choose a location</option>
 								{locations.map((location) => {
-									return <option key={location.id}>{location.name}</option>;
+									return (
+										<option key={location.id} value={location.id}>
+											{location.name}
+										</option>
+									);
 								})}
 							</select>
 						</div>
