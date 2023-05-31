@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react';
 
 function AttendeeForm(props) {
 	const [conferences, setConferences] = useState([]);
-	let [spinnerClasses, setSpinnerClasses] = useState(
-		'd-flex justify-content-center mb-3'
-	);
-	let [dropdownClasses, setDropdownClasses] = useState('form-select d-none');
+	const [loaded, setLoaded] = useState(false);
+	const [submitted, setSubmitted] = useState(false);
+
+	let spinnerClasses = 'spinner-grow text-secondary';
+	let dropdownClasses = 'form-select d-none';
+
+	let successClasses = 'alert alert-success d-none mb-0';
+	let formClasses = '';
 
 	const fetchData = async () => {
 		const url = 'http://localhost:8000/api/conferences/';
@@ -14,17 +18,14 @@ function AttendeeForm(props) {
 		if (response.ok) {
 			const data = await response.json();
 			setConferences(data.conferences);
-
-			let spinnerClasses = 'd-flex justify-content-center mb-3';
-			let dropdownClasses = 'form-select d-none';
-
-			if (conferences.length > 0) {
-				setSpinnerClasses = 'd-flex justify-content-center mb-3 d-none';
-				setDropdownClasses = 'form-select';
-				dropdownClasses = 'form-select';
-			}
+			setLoaded(true);
 		}
 	};
+
+	if (loaded && conferences.length > 0) {
+		spinnerClasses = 'spinner-grow text-secondary d-none';
+		dropdownClasses = 'form-select';
+	}
 
 	const [formData, setFormData] = useState({
 		conference: '',
@@ -62,8 +63,14 @@ function AttendeeForm(props) {
 				name: '',
 				email: '',
 			});
+			setSubmitted(true);
 		}
 	};
+
+	if (submitted) {
+		successClasses = 'alert alert-success mb-0';
+		formClasses = 'd-none';
+	}
 
 	useEffect(() => {
 		fetchData();
@@ -82,13 +89,20 @@ function AttendeeForm(props) {
 				<div className="col">
 					<div className="card shadow">
 						<div className="card-body">
-							<form id="create-attendee-form" onSubmit={handleSubmit}>
+							<form
+								id="create-attendee-form"
+								className={formClasses}
+								onSubmit={handleSubmit}
+							>
 								<h1 className="card-title">It's Conference Time!</h1>
 								<p className="mb-3">
 									Please choose which conference you'd like to attend.
 								</p>
-								<div className={spinnerClasses} id="loading-conference-spinner">
-									<div className="spinner-grow text-secondary" role="status">
+								<div
+									className="d-flex justify-content-center mb-3"
+									id="loading-conference-spinner"
+								>
+									<div className={spinnerClasses} role="status">
 										<span className="visually-hidden">Loading...</span>
 									</div>
 								</div>
@@ -103,7 +117,7 @@ function AttendeeForm(props) {
 										<option value="">Choose a conference</option>
 										{conferences.map((conference) => {
 											return (
-												<option key={conference.id} value={conference.id}>
+												<option key={conference.href} value={conference.href}>
 													{conference.name}
 												</option>
 											);
@@ -124,7 +138,6 @@ function AttendeeForm(props) {
 												onChange={handleFormDataChange}
 												value={formData.name}
 											/>
-											<label htmlFor="name">Your full name</label>
 										</div>
 									</div>
 									<div className="col">
@@ -139,16 +152,12 @@ function AttendeeForm(props) {
 												onChange={handleFormDataChange}
 												value={formData.email}
 											/>
-											<label htmlFor="email">Your email address</label>
 										</div>
 									</div>
 								</div>
 								<button className="btn btn-lg btn-primary">I'm going!</button>
 							</form>
-							<div
-								className="alert alert-success d-none mb-0"
-								id="success-message"
-							>
+							<div className={successClasses} id="success-message">
 								Congratulations! You're all signed up!
 							</div>
 						</div>
